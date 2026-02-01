@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multipurpose Letter</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins&family=Quicksand&family=Pacifico&family=Comic+Neue&family=Roboto&family=Lobster&display=swap" rel="stylesheet">
+
+<!-- EmailJS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+(function(){
+   emailjs.init({ publicKey: "WodD_TueS-UN6i-Va" });
+})();
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+body { font-family:'Quicksand', sans-serif; transition:0.4s; background:#800020; }
+h1 { text-align:center; color:white; margin-bottom:10px; }
+
+button, select, input, textarea { border-radius:8px; padding:8px; font-family:inherit; }
+textarea { resize:none; height:120px; width:100%; }
+
+.hidden { display:none; }
+
+/* Letter UI */
+.container { max-width:900px; margin:auto; padding:15px; border-radius:15px; transition:0.4s; position:relative; }
+.postcard { background:#f7f7f7; padding:20px; border-radius:15px; transition:0.4s; }
+.controls { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:10px; }
+.dark { background:#111; color:white; }
+.dark .postcard { background:#1f1f1f; }
+
+/* Buttons */
+#musicBtn, #saveDraft, #sendLetterBtn { padding:10px 20px; font-size:16px; border-radius:8px; cursor:pointer; border:none; color:white; }
+#musicBtn { background:#ff9dbc; }
+#saveDraft { background:#28a745; }
+#sendLetterBtn { background:#ff4500; }
+
+/* Email Section */
+#emailSection { display:flex; flex-direction:row; gap:10px; margin-top:10px; justify-content:center; }
+
+/* Responsive */
+@media(max-width:600px){ h1 { font-size:2em; } input, textarea { width:100%; } }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="title">Love Letter</h1>
+
+<div style="text-align:center; margin:10px 0;">
+  <button id="musicBtn">Pause Music</button>
+</div>
+
+<div class="controls">
+  <select id="format">
+    <option value="Love Letter">Love</option>
+    <option value="Formal Letter">Formal</option>
+    <option value="Informal Letter">Informal</option>
+    <option value="Birthday Letter">Birthday</option>
+    <option value="Invitation Letter">Invitation</option>
+  </select>
+
+  <select id="fontSelect">
+    <option value="Quicksand">Quicksand</option>
+    <option value="Poppins">Poppins</option>
+    <option value="Playfair Display">Playfair</option>
+    <option value="Pacifico">Pacifico</option>
+    <option value="Comic Neue">Comic Neue</option>
+    <option value="Roboto">Roboto</option>
+    <option value="Lobster">Lobster</option>
+  </select>
+
+  <input type="color" id="textColor">
+  <input type="range" min="14" max="28" value="16" id="fontSize">
+
+  <button id="darkBtn">Dark</button>
+  <button id="resetBtn">Reset</button>
+</div>
+
+<div class="postcard" id="letterBox">
+  <p>Date: <span id="date"></span></p>
+  <p>Dear <input id="recipient" placeholder="Recipient"></p>
+  <textarea id="message" placeholder="Write your message..."></textarea>
+  <p>Sincerely,</p>
+  <input id="sender" placeholder="(Optional / Anonymous)">
+</div>
+
+<div class="controls" id="emailSection">
+  <input id="email" type="email" placeholder="Recipient Gmail">
+  <button id="saveDraft">Save Draft</button>
+  <button id="sendLetterBtn">Send</button>
+</div>
+
+<audio id="bgMusic" loop></audio>
+
+<script src="script.js"></script>
+
+</body>
+</html>
