@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multipurpose Letter</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;500;700&family=Pacifico&family=Quicksand:wght@400;600&family=Comic+Neue:wght@300;700&family=Nunito:wght@300;600&family=Montserrat:wght@400;700&family=Dancing+Script:wght@400;700&family=Abril+Fatface&display=swap" rel="stylesheet">
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function(){ emailjs.init("WodD_TueS-UN6i-Va"); })();
+</script>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  transition: 0.4s;
+  background-color: #800020;
+}
+
+h1 { text-align:center; font-size:3em; margin:20px 0; color:white; }
+.container { max-width:900px; margin:auto; padding:15px; }
+
+.postcard {
+  width:100%;
+  background-color:#f7f7f7;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  margin-bottom:15px;
+}
+
+input, textarea, select, button {
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-family: inherit;
+  margin-bottom:10px;
+  width:100%;
+  font-size:1em;
+}
+
+textarea { resize:none; height:150px; }
+.controls { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:15px; }
+
+#playPauseBtn {
+  width:50px; height:50px; border-radius:50%; border:none;
+  background:#ff9dbc; cursor:pointer; position:relative;
+}
+#playPauseBtn.play::before {
+  content:''; position:absolute; top:12px; left:18px;
+  width:0; height:0; border-left:15px solid white;
+  border-top:10px solid transparent; border-bottom:10px solid transparent;
+}
+#playPauseBtn.pause::before,
+#playPauseBtn.pause::after {
+  content:''; position:absolute; top:12px; width:5px; height:20px; background:white;
+}
+#playPauseBtn.pause::before { left:15px; }
+#playPauseBtn.pause::after { left:25px; }
+
+/* BODY BACKGROUNDS */
+body.love { background-color:#800020; }
+body.formal { background-color:#1f3b4d; }
+body.informal { background-color:#fff0d6; }
+body.birthday { background-color:#ff8acb; }
+body.invitation { background-color:#6a5acd; }
+
+/* TITLE FONTS */
+body.love h1 { font-family:'Pacifico', cursive; color:white; }
+body.formal h1 { font-family:'Playfair Display', serif; color:white; }
+body.informal h1 { font-family:'Comic Neue', sans-serif; color:#a85b00; }
+body.birthday h1 { font-family:'Pacifico', cursive; color:#d60073; }
+body.invitation h1 { font-family:'Quicksand', sans-serif; color:#3a0088; }
+
+/* BUTTON STYLES */
+#saveDraft, #sendBtn {
+  background: linear-gradient(135deg,#ff9dbc,#ff6f91);
+  border:none;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+#saveDraft:hover, #sendBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+@media (max-width:600px) { h1{ font-size:2em; } }
+</style>
+</head>
+
+<body class="love">
+
+<div class="container">
+  <h1 id="title">Love Letter</h1>
+
+  <div class="controls">
+    <select id="format">
+      <option value="love">Love Letter</option>
+      <option value="formal">Formal Letter</option>
+      <option value="informal">Informal Letter</option>
+      <option value="birthday">Birthday Letter</option>
+      <option value="invitation">Invitation Letter</option>
+    </select>
+
+    <select id="fontSelect">
+      <option value="Quicksand">Quicksand</option>
+      <option value="Poppins">Poppins</option>
+      <option value="Playfair Display">Playfair Display</option>
+      <option value="Pacifico">Pacifico</option>
+      <option value="Comic Neue">Comic Neue</option>
+      <option value="Nunito">Nunito</option>
+      <option value="Montserrat">Montserrat</option>
+      <option value="Dancing Script">Dancing Script</option>
+      <option value="Abril Fatface">Abril Fatface</option>
+    </select>
+
+    <input type="color" id="textColor" value="#000000">
+    <input type="range" min="14" max="28" value="16" id="fontSize">
+
+    <button id="playPauseBtn" class="play"></button>
+  </div>
+
+  <div class="postcard" id="letterBox">
+    <p>Date: <span id="date"></span></p>
+    <p>Dear <input id="recipient" placeholder="Recipient"></p>
+    <textarea id="message" placeholder="Write your message..."></textarea>
+    <p>Sincerely,</p>
+    <input id="sender" placeholder="Anonymous (optional)">
+  </div>
+
+  <div class="controls">
+    <input type="email" id="email" placeholder="Recipient Email">
+    <button id="saveDraft">Save Draft</button>
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
+
+<audio id="bgMusic" loop></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
