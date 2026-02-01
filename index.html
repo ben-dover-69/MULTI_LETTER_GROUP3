@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi Letter</title>
+
+<!-- GOOGLE FONTS (OLD + NEW) -->
+<link href="https://fonts.googleapis.com/css2?
+family=Quicksand:wght@400;600&
+family=Poppins:wght@300;500;700&
+family=Playfair+Display:wght@400;600&
+family=Pacifico&
+family=Comic+Neue:wght@300;700&
+family=Nunito:wght@300;600&
+family=Montserrat:wght@400;700&
+family=Dancing+Script:wght@400;700&
+family=Abril+Fatface&
+display=swap" rel="stylesheet">
+
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init({ publicKey: "WodD_TueS-UN6i-Va" });
+})();
+</script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Quicksand, sans-serif;
+  background: #800020;
+  transition: 0.4s;
+}
+
+/* THEMES */
+.love { background:#800020; }
+.formal { background:#1f3b4d; }
+.informal { background:#fff0d6; }
+.birthday { background:#ff8acb; }
+.invitation { background:#6a5acd; }
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.postcard {
+  background: #f7f7f7;
+  border-radius: 16px;
+  padding: 20px;
+  transition: 0.4s;
+}
+
+textarea {
+  width: 100%;
+  height: 140px;
+  resize: none;
+}
+
+button, select, input {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+}
+
+/* PLAY / PAUSE BUTTON */
+#playPauseBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: #ff9dbc;
+  cursor: pointer;
+  position: relative;
+}
+
+#playPauseBtn.play::before {
+  content:'';
+  position:absolute;
+  top:14px; left:20px;
+  width:0; height:0;
+  border-left:14px solid white;
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent;
+}
+
+#playPauseBtn.pause::before,
+#playPauseBtn.pause::after {
+  content:'';
+  position:absolute;
+  top:14px;
+  width:5px; height:22px;
+  background:white;
+}
+#playPauseBtn.pause::before { left:17px; }
+#playPauseBtn.pause::after { left:27px; }
+</style>
+</head>
+
+<body class="love">
+
+<div class="container">
+  <h1 id="title">Love Letter</h1>
+
+  <div class="controls">
+    <select id="format">
+      <option value="love">Love</option>
+      <option value="formal">Formal</option>
+      <option value="informal">Informal</option>
+      <option value="birthday">Birthday</option>
+      <option value="invitation">Invitation</option>
+    </select>
+
+    <select id="fontSelect">
+      <option value="Quicksand">Quicksand</option>
+      <option value="Poppins">Poppins</option>
+      <option value="Playfair Display">Playfair Display</option>
+      <option value="Pacifico">Pacifico</option>
+      <option value="Comic Neue">Comic Neue</option>
+      <option value="Nunito">Nunito</option>
+      <option value="Montserrat">Montserrat</option>
+      <option value="Dancing Script">Dancing Script</option>
+      <option value="Abril Fatface">Abril Fatface</option>
+    </select>
+
+    <input type="color" id="textColor">
+    <input type="range" min="14" max="28" value="16" id="fontSize">
+
+    <button id="playPauseBtn" class="play"></button>
+  </div>
+
+  <div class="postcard" id="letterBox">
+    <p>Date: <span id="date"></span></p>
+    <p>Dear <input id="recipient" placeholder="Recipient name"></p>
+    <textarea id="message" placeholder="Write your message..."></textarea>
+    <p>Sincerely,</p>
+    <input id="sender" placeholder="Anonymous (optional)">
+  </div>
+
+  <div class="controls">
+    <input type="email" id="email" placeholder="Recipient email">
+    <button id="saveDraft">Save Draft</button>
+    <button onclick="sendMail()">Send</button>
+  </div>
+</div>
+
+<audio id="bgMusic" loop></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
