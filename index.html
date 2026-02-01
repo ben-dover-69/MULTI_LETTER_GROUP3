@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multipurpose Letter</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;500;700&family=Pacifico&family=Quicksand:wght@400;600&family=Comic+Neue:wght@300;700&family=Nunito:wght@300;600&family=Montserrat:wght@400;700&family=Dancing+Script:wght@400;700&family=Abril+Fatface&display=swap" rel="stylesheet">
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function(){ emailjs.init("WodD_TueS-UN6i-Va"); })();
+</script>
+
+<style>
+/* GENERAL STYLES */
+body {
+  margin:0;
+  font-family:'Quicksand',sans-serif;
+  transition:0.4s;
+}
+h1{text-align:center;margin:20px 0;color:white;font-size:3em;}
+.container{max-width:900px;margin:auto;padding:15px;}
+.postcard{
+  width:100%; background-color:#f7f7f7; padding:30px;
+  border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.3); margin-bottom:15px;
+}
+input, textarea, select, button{
+  padding:10px;border-radius:8px;border:1px solid #ccc;font-family:inherit;margin-bottom:10px;width:100%;font-size:1em;
+}
+textarea{resize:none;height:150px;}
+.controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:15px;}
+#playPauseBtn{
+  width:50px;height:50px;border-radius:50%;border:none;background:#ff9dbc;cursor:pointer;position:relative;
+}
+#playPauseBtn.play::before{
+  content:'';position:absolute;top:12px;left:18px;width:0;height:0;
+  border-left:15px solid white; border-top:10px solid transparent;border-bottom:10px solid transparent;
+}
+#playPauseBtn.pause::before,#playPauseBtn.pause::after{
+  content:'';position:absolute;top:12px;width:5px;height:20px;background:white;
+}
+#playPauseBtn.pause::before{left:15px;}
+#playPauseBtn.pause::after{left:25px;}
+/* BODY BACKGROUNDS */
+body.love{background-color:#800020;}
+body.formal{background-color:#1f3b4d;}
+body.informal{background-color:#fff0d6;}
+body.birthday{background-color:#ff8acb;}
+body.invitation{background-color:#6a5acd;}
+/* TITLE FONTS */
+body.love h1{font-family:'Pacifico',cursive;color:white;}
+body.formal h1{font-family:'Playfair Display',serif;color:white;}
+body.informal h1{font-family:'Comic Neue',sans-serif;color:#a85b00;}
+body.birthday h1{font-family:'Pacifico',cursive;color:#d60073;}
+body.invitation h1{font-family:'Quicksand',sans-serif;color:#3a0088;}
+/* BUTTON STYLING */
+#saveDraft,#sendBtn{
+  background: linear-gradient(135deg,#ff9dbc,#ff6f91);border:none;color:white;font-weight:bold;cursor:pointer;transition:0.3s;
+}
+#saveDraft:hover,#sendBtn:hover{
+  transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.2);
+}
+@media (max-width:600px){h1{font-size:2em;}}
+</style>
+</head>
+
+<body class="love">
+
+<div class="container">
+  <h1 id="title">Love Letter</h1>
+
+  <div class="controls">
+    <select id="format">
+      <option value="love">Love Letter</option>
+      <option value="formal">Formal Letter</option>
+      <option value="informal">Informal Letter</option>
+      <option value="birthday">Birthday Letter</option>
+      <option value="invitation">Invitation Letter</option>
+    </select>
+
+    <select id="fontSelect">
+      <option value="Quicksand">Quicksand</option>
+      <option value="Poppins">Poppins</option>
+      <option value="Playfair Display">Playfair Display</option>
+      <option value="Pacifico">Pacifico</option>
+      <option value="Comic Neue">Comic Neue</option>
+      <option value="Nunito">Nunito</option>
+      <option value="Montserrat">Montserrat</option>
+      <option value="Dancing Script">Dancing Script</option>
+      <option value="Abril Fatface">Abril Fatface</option>
+    </select>
+
+    <input type="color" id="textColor" value="#000000">
+    <input type="range" min="14" max="28" value="16" id="fontSize">
+    <button id="playPauseBtn" class="play"></button>
+  </div>
+
+  <div class="postcard" id="letterBox">
+    <p>Date: <span id="date"></span></p>
+    <p>Dear <input id="recipient" placeholder="Recipient"></p>
+    <textarea id="message" placeholder="Write your message..."></textarea>
+    <p>Sincerely,</p>
+    <input id="sender" placeholder="Anonymous (optional)">
+  </div>
+
+  <div class="controls">
+    <input type="email" id="email" placeholder="Recipient Email">
+    <button id="saveDraft">Save Draft</button>
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
+
+<audio id="bgMusic" loop></audio>
+
+<script>
+// ELEMENTS
+const body = document.body;
+const title = document.getElementById("title");
+const format = document.getElementById("format");
+const letterBox = document.getElementById("letterBox");
+
+const fontSelect = document.getElementById("fontSelect");
+const textColor = document.getElementById("textColor");
+const fontSize = document.getElementById("fontSize");
+
+const recipient = document.getElementById("recipient");
+const sender = document.getElementById("sender");
+const message = document.getElementById("message");
+const email = document.getElementById("email");
+
+const bgMusic = document.getElementById("bgMusic");
+const playPauseBtn = document.getElementById("playPauseBtn");
+let playing = false;
+
+// THEMES WITH MUSIC
+const themes = {
+  love: ["Love Letter","Pacifico","#800020","kuped.mp3"],
+  formal: ["Formal Letter","Playfair Display","#1f3b4d","peynknwite.mp3"],
+  informal: ["Informal Letter","Comic Neue","#fff0d6","arizonab.mp3"],
+  birthday: ["Birthday Letter","Pacifico","#ff8acb","bdaysmegs.mp3"],
+  invitation: ["Invitation Letter","Quicksand","#6a5acd","when.mp3"]
+};
+
+// DATE
+const today = new Date().toLocaleDateString(undefined, {year:"numeric", month:"long", day:"numeric"});
+document.getElementById("date").innerText = today;
+
+// ===== SWITCH LETTER =====
+format.onchange = () => {
+  const [t,f,bg,musicSrc] = themes[format.value];
+  title.innerText = t;
+  letterBox.style.fontFamily = f;
+  body.className = format.value;
+  bgMusic.src = musicSrc;
+  if(playing){ bgMusic.play(); }
+};
+
+// ===== FONT/STYLING CONTROLS =====
+fontSelect.onchange = () => letterBox.style.fontFamily = fontSelect.value;
+textColor.oninput = () => letterBox.style.color = textColor.value;
+fontSize.oninput = () => letterBox.style.fontSize = fontSize.value+"px";
+
+// ===== MUSIC PLAY/PAUSE =====
+playPauseBtn.onclick = () => {
+  if(!playing){
+    bgMusic.play().catch(()=>{}); 
+    playPauseBtn.className="pause";
+  } else {
+    bgMusic.pause();
+    playPauseBtn.className="play";
+  }
+  playing=!playing;
+};
+
+// ===== SAVE DRAFT =====
+document.getElementById("saveDraft").onclick = () => {
+  localStorage.setItem("draft", JSON.stringify({
+    r:recipient.value,
+    s:sender.value,
+    m:message.value,
+    f:fontSelect.value,
+    c:textColor.value,
+    z:fontSize.value,
+    type: format.value
+  }));
+  alert("Draft saved");
+};
+
+// LOAD DRAFT
+const saved = JSON.parse(localStorage.getItem("draft"));
+if(saved){
+  recipient.value = saved.r;
+  sender.value = saved.s;
+  message.value = saved.m;
+  fontSelect.value = saved.f;
+  textColor.value = saved.c;
+  fontSize.value = saved.z;
+  format.value = saved.type;
+  const [t,f,bg,musicSrc] = themes[format.value];
+  title.innerText = t;
+  letterBox.style.fontFamily = f;
+  letterBox.style.color = saved.c;
+  letterBox.style.fontSize = saved.z+"px";
+  body.className = format.value;
+  bgMusic.src = musicSrc;
+}
+
+// ===== SEND EMAIL VIA EMAILJS =====
+document.getElementById("sendBtn").onclick = () => {
+  if(!email.value){
+    alert("Please enter recipient email");
+    return;
+  }
+
+  const letterData = {
+    title:title.innerText,
+    recipient:recipient.value,
+    sender:sender.value || "Anonymous",
+    message:message.value,
+    font:letterBox.style.fontFamily,
+    color:letterBox.style.color,
+    size:letterBox.style.fontSize,
+    date:today,
+    type: format.value
+  };
+
+  const encoded = btoa(JSON.stringify(letterData));
+  const viewLink = `https://ben-dover-69.github.io/MULTI_LETTER_GROUP3/view.html?data=${encoded}`;
+
+  emailjs.send("service_blwhkvs","template_ka72mdg",{
+    email: email.value,
+    view_link: viewLink
+  })
+  .then((response)=>{
+    console.log("SUCCESS", response);
+    alert("Letter sent successfully 💌");
+  })
+  .catch((err)=>{
+    console.error("FAILED", err);
+    alert("Failed to send the letter. Check console for errors.");
+  });
+};
+</script>
+
+</body>
+</html>

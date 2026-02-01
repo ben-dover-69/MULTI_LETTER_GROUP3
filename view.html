@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>View Letter</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;500;700&family=Pacifico&family=Quicksand:wght@400;600&family=Comic+Neue:wght@300;700&family=Nunito:wght@300;600&family=Montserrat:wght@400;700&family=Dancing+Script:wght@400;700&family=Abril+Fatface&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin:0;
+  font-family:'Quicksand',sans-serif;
+  transition:0.4s;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:15px;
+  background-color:#f0f0f0;
+}
+.container{
+  max-width:800px;
+  width:100%;
+  background:#f7f7f7;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+h1{
+  text-align:center;
+  margin-bottom:20px;
+}
+p{
+  margin:10px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1 id="title">Letter Title</h1>
+  <p>Date: <span id="date">—</span></p>
+  <p>Dear <span id="recipient">—</span>,</p>
+  <p id="message">—</p>
+  <p>Sincerely,</p>
+  <p id="sender">—</p>
+</div>
+
+<script>
+// GET DATA FROM URL
+const params = new URLSearchParams(window.location.search);
+const dataEncoded = params.get('data');
+
+if(dataEncoded){
+  try{
+    const data = JSON.parse(atob(dataEncoded));
+
+    document.getElementById("title").innerText = data.title;
+    document.getElementById("title").style.fontFamily = data.font;
+    document.body.style.backgroundColor = {
+      love:"#800020",
+      formal:"#1f3b4d",
+      informal:"#fff0d6",
+      birthday:"#ff8acb",
+      invitation:"#6a5acd"
+    }[data.type] || "#f0f0f0";
+
+    const letterBox = document.querySelector(".container");
+    letterBox.style.fontFamily = data.font;
+    letterBox.style.color = data.color;
+    letterBox.style.fontSize = data.size;
+
+    document.getElementById("date").innerText = data.date;
+    document.getElementById("recipient").innerText = data.recipient;
+    document.getElementById("message").innerText = data.message;
+    document.getElementById("sender").innerText = data.sender;
+
+  } catch(e){
+    alert("Invalid letter data!");
+  }
+}else{
+  alert("No letter data found!");
+}
+</script>
+
+</body>
+</html>
